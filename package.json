@@ -1,0 +1,17 @@
+{
+  "name": "ghp_house-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:GabrielHenriP/ghp_house-backend.git",
+  "author": "gabriel <soadhenri@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
