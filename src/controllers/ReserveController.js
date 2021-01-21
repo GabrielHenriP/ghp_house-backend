@@ -3,50 +3,49 @@ import User from '../models/User';
 import House from '../models/House';
 
 class ReserveController {
-  async index (req, res){
-    const { user_id } = req.headers
+  async index(req, res) {
+    const { user_id } = req.headers;
 
-    const reserves = await Reserve.find({ user: user_id}).populate('house')
+    const reserves = await Reserve.find({ user: user_id }).populate('house');
 
-    return res.json(reserves)
+    return res.json(reserves);
   }
 
-  async store(req, res){
-    const { house_id } = req.params
+  async store(req, res) {
+    const { house_id } = req.params;
     const { user_id } = req.headers;
     const { date } = req.body;
 
     const house = await House.findById(house_id);
-    if(!house){
-      return res.status(400).json({ error: "essa casa não existe"})
+    if (!house) {
+      return res.status(400).json({ error: 'essa casa não existe' });
     }
-    if(house.status !== true){
-      return res.status(400).json({ error: "Casa indisponível no momento"})
+    if (house.status !== true) {
+      return res.status(400).json({ error: 'Casa indisponível no momento' });
     }
 
     const user = await User.findById(user_id);
-    if(String(user._id) === String(house.user)){
-      return res.status(400).json({ error: "Ação não permitida"})
+    if (String(user._id) === String(house.user)) {
+      return res.status(400).json({ error: 'Ação não permitida' });
     }
 
     const reserve = await Reserve.create({
       user: user_id,
       house: house_id,
-      date
+      date,
     });
 
     await reserve.populate('house').populate('user').execPopulate();
 
-    return res.json(reserve)
+    return res.json(reserve);
   }
 
-  async destroy(req,res){
+  async destroy(req, res) {
     const { reserve_id } = req.body;
 
-    await Reserve.findByIdAndDelete({ _id: reserve_id})
+    await Reserve.findByIdAndDelete({ _id: reserve_id });
 
-
-    return res.sendStatus(200)
+    return res.sendStatus(200);
   }
 }
 
